@@ -90,7 +90,7 @@ def help():
         "   - '.' als Dezimaltrennzeichen\n" +
         "   - alle vier Vektoren müssen entweder zwei- oder dreidimensional sein (alle gleich)\n"
     )
-    exit()
+    exit(1)
 
 def main():
     try:
