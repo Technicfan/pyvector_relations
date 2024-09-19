@@ -117,5 +117,6 @@ def main():
             print("Die Geraden schneiden sich bei S(" + "|".join(str(custom_round(i)) for i in relation) + ").")
         else:
             print("Die Geraden sind Windschief.")
+    print()
 
 main()
