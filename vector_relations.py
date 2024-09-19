@@ -23,8 +23,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    print("numpy muss installiert sein!")
+    exit(1)
 
 def custom_round(number):
     part = number - int(number)
