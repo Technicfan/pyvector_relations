@@ -142,8 +142,7 @@ def main():
     print()
     # no better solution for keeping it open
     if platform == "win32":
-        while True:
-            pass
+        input("ENTER zum Beenden")
 
 if __name__ == "__main__":
     try:
