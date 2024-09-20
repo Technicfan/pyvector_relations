@@ -73,7 +73,7 @@ def check_crossing(s1, r1, s2, r2):
         point.append(one + results[0][0] * two)
     return point
 
-def check_parallel(s1, r1, s2, r2):
+def check_parallel(r1, r2):
     i = 0
     while i < len(r1) - 1 and r1[i] == r2[i] == 0:
         i += 1
@@ -86,7 +86,7 @@ def check_parallel(s1, r1, s2, r2):
         return False
     return True
 
-def check_same(s1, r1, s2, r2):
+def check_same(s1, s2, r2):
     i = 0
     while i < len(r2) - 1 and r2[i] == (s1[i] - s2[i]) == 0:
         i += 1
@@ -128,8 +128,8 @@ def main():
     if check_zero_vector(r1, r2):
         print("Mit einem Nullvektor als Richtungsvektor entsteht keine Gerade.")
     else:
-        if check_parallel(s1, r1, s2, r2):
-            if check_same(s1, r1, s2, r2):
+        if check_parallel(r1, r2):
+            if check_same(s1, s2, r2):
                 print("Die Geraden sind Deckungsgleich.")
             else:
                 print("Die Geraden sind parallel.")
