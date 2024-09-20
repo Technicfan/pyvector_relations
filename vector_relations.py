@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from sys import exit
+from sys import exit, platform
 
 def custom_round(number):
     part = number - int(number)
@@ -141,8 +141,9 @@ def main():
                 print("Die Geraden sind Windschief.")
     print()
     # no better solution for keeping it open
-    while True:
-        pass
+    if platform == "win32":
+        while True:
+            pass
 
 if __name__ == "__main__":
     try:
