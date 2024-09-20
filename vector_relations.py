@@ -142,7 +142,8 @@ def main():
     print()
     # no better solution for keeping it open
     if platform == "win32":
-        input("ENTER zum Beenden")
+        input("ENTER zum Beenden ")
+        exit()
 
 if __name__ == "__main__":
     try:
