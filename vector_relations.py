@@ -102,7 +102,7 @@ def check_same(s1, s2, r2):
         return False
     return True
 
-def help(status):
+def help():
     print(
         "\nHilfe:\n"
         "\nEingabe der Vektoren:\n" +
@@ -115,11 +115,11 @@ def help(status):
         "   - \"help\" für diesen Text\n"
         "   - \"numpy\" um numpy für die Bestimmung des Schnittpunkts verwenden\n"
     )
-    exit(status)
 
 def main(args):
     if "help" in args:
-        help(0)
+        help()
+        return 0
 
     try:
         print("\n1. Gerade:")
@@ -131,7 +131,8 @@ def main(args):
         if not (len(s1) == len(r1) == len(s2) == len(r2) in [2, 3]):
             raise ValueError
     except ValueError:
-        help(1)
+        help()
+        return 1
 
     print()
     if check_zero_vector(r1, r2):
@@ -152,9 +153,10 @@ def main(args):
 
 if __name__ == "__main__":
     try:
-        main(argv)
-        if platform == "win32":
+        status = main(argv)
+        if platform != "win32":
             # no better solution for keeping it open
             input("ENTER zum Beenden ")
+        exit(status)
     except KeyboardInterrupt:
         exit(1)
