@@ -149,12 +149,12 @@ def main(args):
             else:
                 print("Die Geraden sind windschief.")
     print()
-    if platform == "win32":
-        # no better solution for keeping it open
-        input("ENTER zum Beenden ")
 
 if __name__ == "__main__":
     try:
         main(argv)
+        if platform == "win32":
+            # no better solution for keeping it open
+            input("ENTER zum Beenden ")
     except KeyboardInterrupt:
         exit(1)
