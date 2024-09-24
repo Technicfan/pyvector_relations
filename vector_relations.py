@@ -154,7 +154,7 @@ def main(args):
 if __name__ == "__main__":
     try:
         status = main(argv)
-        if platform != "win32":
+        if platform == "win32":
             # no better solution for keeping it open
             input("ENTER zum Beenden ")
         exit(status)
