@@ -130,7 +130,7 @@ def main():
     else:
         if check_parallel(r1, r2):
             if check_same(s1, s2, r2):
-                print("Die Geraden sind Deckungsgleich.")
+                print("Die Geraden sind identisch.")
             else:
                 print("Die Geraden sind parallel.")
         else:
@@ -138,7 +138,7 @@ def main():
             if relation:
                 print("Die Geraden schneiden sich im Punkt S(" + "|".join(str(custom_round(i)) for i in relation) + ").")
             else:
-                print("Die Geraden sind Windschief.")
+                print("Die Geraden sind windschief.")
     print()
     # no better solution for keeping it open
     if platform == "win32":
