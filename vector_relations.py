@@ -48,10 +48,8 @@ def check_crossing(s1, r1, s2, r2, numpy):
         second_part.append([a2 - a1])
 
     try:
-        # first method using numpy (more elegant)
         if not numpy:
             raise ImportError
-
         import numpy as np
         try:
             results = np.linalg.solve(first_part[:2], second_part[:2])
@@ -59,9 +57,9 @@ def check_crossing(s1, r1, s2, r2, numpy):
                 return False
         except:
             return False
-
     except ImportError:
-        # manual method
+        if numpy:
+            print("Um numpy zu verwenden, muss es installiert sein (pip)")
         try:
             x = ( first_part[1][1] * second_part[0][0] - first_part[0][1] * second_part[1][0] ) /\
                  ( first_part[0][0] * first_part[1][1] - first_part[0][1] * first_part[1][0] )
@@ -104,7 +102,7 @@ def check_same(s1, s2, r2):
         return False
     return True
 
-def help():
+def help(status):
     print(
         "\nHilfe:\n"
         "\nEingabe der Vektoren:\n" +
@@ -117,11 +115,11 @@ def help():
         "   - \"help\" für diesen Text\n"
         "   - \"numpy\" um numpy für die Bestimmung des Schnittpunkts verwenden\n"
     )
-    exit()
+    exit(status)
 
 def main(args):
     if "help" in args:
-        help()
+        help(0)
 
     try:
         print("\n1. Gerade:")
@@ -130,11 +128,10 @@ def main(args):
         print("2. Gerade:")
         s2 = list(map(float, input("    Stützvektor: ").split(",")))
         r2 = list(map(float, input("    Richtungsvektor: ").split(",")))
-    except (ValueError, KeyboardInterrupt):
-        help()
-    
-    if not (len(s1) == len(r1) == len(s2) == len(r2) in [2, 3]):
-        help()
+        if not (len(s1) == len(r1) == len(s2) == len(r2) in [2, 3]):
+            raise ValueError
+    except ValueError:
+        help(1)
 
     print()
     if check_zero_vector(r1, r2):
@@ -152,12 +149,12 @@ def main(args):
             else:
                 print("Die Geraden sind windschief.")
     print()
-    # no better solution for keeping it open
     if platform == "win32":
+        # no better solution for keeping it open
         input("ENTER zum Beenden ")
 
 if __name__ == "__main__":
     try:
         main(argv)
     except KeyboardInterrupt:
-        exit()
+        exit(1)
