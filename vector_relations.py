@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from sys import exit, platform
+from sys import exit, platform, argv
 
 def custom_round(number):
     part = number - int(number)
@@ -40,7 +40,7 @@ def check_zero_vector(r1, r2):
         zero2 += abs(two)
     return zero1 == 0 or zero2 == 0
 
-def check_crossing(s1, r1, s2, r2):
+def check_crossing(s1, r1, s2, r2, numpy):
     first_part = []
     second_part = []
     for x, y, a1, a2 in zip(r1, r2, s1, s2):
@@ -49,10 +49,15 @@ def check_crossing(s1, r1, s2, r2):
 
     try:
         # first method using numpy (more elegant)
-        import numpy as np
+        if not numpy:
+            raise ImportError
 
-        results = np.linalg.solve(first_part[:2], second_part[:2])
-        if len(first_part) == 3 and not np.allclose(np.dot(first_part[-1], results), second_part[-1]):
+        import numpy as np
+        try:
+            results = np.linalg.solve(first_part[:2], second_part[:2])
+            if len(first_part) == 3 and not np.allclose(np.dot(first_part[-1], results), second_part[-1]):
+                return False
+        except:
             return False
 
     except ImportError:
@@ -60,10 +65,10 @@ def check_crossing(s1, r1, s2, r2):
         try:
             x = ( first_part[1][1] * second_part[0][0] - first_part[0][1] * second_part[1][0] ) /\
                  ( first_part[0][0] * first_part[1][1] - first_part[0][1] * first_part[1][0] )
+            y = ( second_part[0][0] - first_part[0][0] * x ) / first_part[0][1]
         except ZeroDivisionError:
             return False
-        y = ( second_part[0][0] - first_part[0][0] * x ) / first_part[0][1]
-        if len(first_part) == 3 and first_part[2][0] * x + first_part[2][1] * y != second_part[2][0]:
+        if len(first_part) == 3 and first_part[-1][0] * x + first_part[-1][1] * y != second_part[-1][0]:
             return False
         else:
             results = [[x, y]]
@@ -77,12 +82,12 @@ def check_parallel(r1, r2):
     i = 0
     while i < len(r1) - 1 and r1[i] == r2[i] == 0:
         i += 1
-    if r2[i] != 0:
+    try:
         first = r1[i] / r2[i]
-        for one, two in zip(r1[i:], r2[i:]):
+        for one, two in zip(r1[i+1:], r2[i+1:]):
             if not (one == two == 0) and one / two != first:
                 return False
-    else:
+    except ZeroDivisionError:
         return False
     return True
 
@@ -90,27 +95,34 @@ def check_same(s1, s2, r2):
     i = 0
     while i < len(r2) - 1 and r2[i] == (s1[i] - s2[i]) == 0:
         i += 1
-    if r2[i] != 0:
-        first = (s1[0] - s2[0]) / r2[0]
-        for one, two, three in zip(s1[1:], s2[1:], r2[1:]):
+    try:
+        first = (s1[i] - s2[i]) / r2[i]
+        for one, two, three in zip(s1[i+1:], s2[i+1:], r2[i+1:]):
             if not ((one - two) == three == 0) and (one - two) / three != first:
                 return False
-    else:
+    except ZeroDivisionError:
         return False
     return True
 
 def help():
     print(
-        "\nFehlerhafte Eingabe!\n" +
+        "\nHilfe:\n"
         "\nEingabe der Vektoren:\n" +
         "   x, y, z oder x, y\n" +
         "   - Leerzeichen nicht notwending\n" +
         "   - '.' als Dezimaltrennzeichen\n" +
-        "   - alle vier Vektoren müssen entweder zwei- oder dreidimensional sein (alle gleich)\n"
+        "   - alle vier Vektoren müssen entweder zwei- oder dreidimensional sein (alle gleich)\n" +
+        "\nErweitert:\n" +
+        "   Argumente:\n" +
+        "   - \"help\" für diesen Text\n"
+        "   - \"numpy\" um numpy für die Bestimmung des Schnittpunkts verwenden\n"
     )
-    exit(1)
+    exit()
 
-def main():
+def main(args):
+    if "help" in args:
+        help()
+
     try:
         print("\n1. Gerade:")
         s1 = list(map(float, input("    Stützvektor: ").split(",")))
@@ -134,7 +146,7 @@ def main():
             else:
                 print("Die Geraden sind parallel.")
         else:
-            relation = check_crossing(s1, r1, s2, r2)
+            relation = check_crossing(s1, r1, s2, r2, "numpy" in args)
             if relation:
                 print("Die Geraden schneiden sich im Punkt S(" + "|".join(str(custom_round(i)) for i in relation) + ").")
             else:
@@ -146,6 +158,6 @@ def main():
 
 if __name__ == "__main__":
     try:
-        main()
+        main(argv)
     except KeyboardInterrupt:
         exit()
